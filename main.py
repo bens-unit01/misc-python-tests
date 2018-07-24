@@ -11,7 +11,8 @@ if __name__ == '__main__':
     pass
     print("app started ")
 #    test_shell.TestShell().test1()
-    relay.Relay().test1()
+#    relay.Relay().test1()
+    relay.Relay().test2()
 
 
 

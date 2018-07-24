@@ -4,6 +4,7 @@ Created on Jul 16, 2018
 @author: osboxes
 '''
 import serial 
+from optparse import OptionParser
 
 class Relay(object):
     
@@ -17,7 +18,20 @@ class Relay(object):
     # end printToScreen(msgstr):
 
   
-        
+    def test2(self):        
+        print "test 2 ... start"
+        parser = OptionParser()
+        parser.add_option("-d", "--device", action="store", type="string", dest="device", help="The device serial, example A6VV5PHY")
+        parser.add_option("-l", "--list", action="store_true", dest="list", default=False, help="List all devices")
+        parser.add_option("-r", "--relay", action="store", type="string", dest="relay", help="Relay to command by number: 1...8 or all")
+        parser.add_option("-c", "--command", action="store", type="string", dest="command", help="State: on, off, state")
+        parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Verbose, print all info on screen")
+        parser.add_option("-t", "--type", action="store", dest="type", default=1, help="Type, select between a 16 (1) channel or 8 (2) channel relay")
+        (options, args) = parser.parse_args()
+        print options
+        print args
+        print "test 2 ... end"
+
     def test1(self):
         print "test 1  ... start"
         NewSerialPort = serial.Serial()
