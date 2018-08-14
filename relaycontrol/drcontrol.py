@@ -1,4 +1,4 @@
-#!/c/Python27/python
+#!/usr/bin/python
 # coding=UTF-8
 
 # ----------------------------------------------------------------------------
@@ -157,28 +157,35 @@ def set_relay_16ch():
     command_vector = [0x3A, 0x46, 0x45, 0x30, 0x35, 0x30, 0x30, 0x30, 0x30, 0x46, 0x46, 0x30, 0x30, 0x46, 0x45, 0x0D, 0x0A]
     on     = [0x45, 0x44, 0x43, 0x42, 0x41, 0x39, 0x38, 0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x30, 0x46]
     off    = [0x44, 0x43, 0x42, 0x41, 0x39, 0x38, 0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x30, 0x46, 0x45]
+    all_on = [0x3A, 0x46, 0x45, 0x30, 0x46, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x31, 0x30, 0x30, 0x32, 0x46, 0x46, 0x46, 0x46, 0x45, 0x33, 0x0D, 0x0A]
+    all_off = [0x3A, 0x46, 0x45, 0x30, 0x46, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x31, 0x30, 0x30, 0x32, 0x30, 0x30, 0x30, 0x30, 0x45, 0x31, 0x0D, 0x0A]
 
     print command_vector 
     print " ".join(hex(n) for n in command_vector)
     print "-- --"
     print cmdarg.relay
-    
-    command_vector[8] = 0x30 + int(cmdarg.relay) -1; 
-    command_vector[9] = 0x46 if (cmdarg.command == 'on') else 0x30; 
-    command_vector[10] =  command_vector[9]
-
-    if int(cmdarg.relay) >= 11:
-        command_vector[8] += 7; 
-    
-    if cmdarg.command == "on":
-        command_vector[14] = on[int(cmdarg.relay) -1]
+    if(cmdarg.relay == 'all'):
+        if(cmdarg.command == 'off'): 
+           command_vector = all_off;  
+        else: 
+            command_vector = all_on
     else:
-        command_vector[14] = off[int(cmdarg.relay) -1]
+        command_vector[8] = 0x30 + int(cmdarg.relay) -1; 
+        command_vector[9] = 0x46 if (cmdarg.command == 'on') else 0x30; 
+        command_vector[10] =  command_vector[9]
+
+        if int(cmdarg.relay) >= 11:
+            command_vector[8] += 7; 
+
+        if cmdarg.command == "on":
+            command_vector[14] = on[int(cmdarg.relay) -1]
+        else:
+            command_vector[14] = off[int(cmdarg.relay) -1]
 
     print " ".join(hex(n) for n in command_vector)
 
 
-## Sending the command to the relay 
+## Sending command to the relay 
     NewSerialPort = init_serial()
     if (NewSerialPort.isOpen() == False):
         try:
@@ -194,10 +201,9 @@ def set_relay_16ch():
         NewSerialPort.flushOutput()#flush output buffer, aborting current output
 
 
-        print(command_vector)
-        NewSerialPort.write(command_vector)
-        NewSerialPort.close() 
-        print "test 1  ... end"
+    NewSerialPort.write(command_vector)
+    NewSerialPort.close() 
+    print "test 1  ... end"
 
  
 
