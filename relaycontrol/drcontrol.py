@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!C:/Python37/python
 # coding=UTF-8
 
 # ----------------------------------------------------------------------------
@@ -132,9 +132,9 @@ def list_devices():
 
 
 
-def init_serial():    
+def init_serial(port):    
     NewSerialPort = serial.Serial()
-    NewSerialPort.port = "/dev/ttyUSB0" 
+    NewSerialPort.port = port 
     NewSerialPort.baudrate = 9600 
     NewSerialPort.bytesize = serial.EIGHTBITS     #number of bits per bytes
     NewSerialPort.parity = serial.PARITY_NONE     #set parity check: no parity
@@ -186,7 +186,7 @@ def set_relay_16ch():
 
 
 ## Sending command to the relay 
-    NewSerialPort = init_serial()
+    NewSerialPort = init_serial(cmdarg.device)
     if (NewSerialPort.isOpen() == False):
         try:
             NewSerialPort.open()
